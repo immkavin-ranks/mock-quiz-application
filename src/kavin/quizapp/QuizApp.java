@@ -7,11 +7,13 @@ import java.util.List;
 public class QuizApp extends JFrame{
     JLabel question;
     JRadioButton[] options = new JRadioButton[4];
-    JButton nextQuestion;
+    JButton nextQuestion, submitQuiz;
     ButtonGroup bg;
     List<String[]> questions = new Questions().getQuestions();
     int current = 1;
     int count = questions.size();
+
+    String[] responses = new String[count];
     public QuizApp() throws IOException {
 
         question = new JLabel();
@@ -29,6 +31,10 @@ public class QuizApp extends JFrame{
         nextQuestion = new JButton("Next");
         add(nextQuestion);
 
+        submitQuiz = new JButton("Submit");
+        add(submitQuiz);
+        submitQuiz.setEnabled(false);
+
         nextQuestion.addActionListener(e -> onNext());
 
         setComponents();
@@ -45,6 +51,7 @@ public class QuizApp extends JFrame{
         options[3].setBounds(70, 170, 100, 20);
 
         nextQuestion.setBounds(120, 240, 100, 30);
+        submitQuiz.setBounds(250, 240, 100, 30);
 
         setLocation(250, 100);
         setSize(600, 450);
@@ -56,12 +63,23 @@ public class QuizApp extends JFrame{
     }
 
     private void onNext() {
+        setResponse();
+
+        if (current == count - 2) {
+            nextQuestion.setEnabled(false);
+            submitQuiz.setEnabled(true);
+        }
 
         if (current < count - 1) {
             current++;
             setCurrentQuestion();
         }
 
+    }
+
+    public void setResponse() {
+        ButtonModel buttonModel = bg.getSelection();
+        responses[current] = buttonModel == null ? "" : buttonModel.getActionCommand();
     }
 
     public String[] getCurrentQuestion() {
@@ -76,6 +94,7 @@ public class QuizApp extends JFrame{
 
         for (int i = 0; i < 4; i++) {
             options[i].setText(q[i + 1]);
+            options[i].setActionCommand(q[i + 1]);
             bg.clearSelection();
         }
     }
