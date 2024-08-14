@@ -11,7 +11,8 @@ class ExpertsCodeOnlineTest extends JFrame implements ActionListener {
     JRadioButton[] option =new JRadioButton[5];
     JButton b1,b2;
     ButtonGroup bg;
-    int count=0,current=0,x=1,y=1,now=0;
+    static int count =0;
+    int current=0,x=1,y=1,now=0;
     int[] m =new int[10];
     ExpertsCodeOnlineTest()
     {
@@ -25,8 +26,13 @@ class ExpertsCodeOnlineTest extends JFrame implements ActionListener {
             bg.add(option[i]);
         }
         b1=new JButton("Next");
-        b1.addActionListener(this); // ActionListener added
-        add(b1);
+        // Creating the result Button
+        b2=new JButton("Result");
+        b1.addActionListener(this);
+        b2.setEnabled(false);
+        // Adding it to pane
+        b2.addActionListener(this);
+        add(b1);add(b2);
         set();
         label.setBounds(30,40,450,20);
         option[0].setBounds(50,80,100,20);
@@ -34,6 +40,7 @@ class ExpertsCodeOnlineTest extends JFrame implements ActionListener {
         option[2].setBounds(50,140,100,20);
         option[3].setBounds(50,170,100,20);
         b1.setBounds(100,240,100,30);
+        b2.setBounds(270,240,100,30);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setLocation(250,100);
@@ -46,20 +53,42 @@ class ExpertsCodeOnlineTest extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e)
     {
         if(e.getSource()==b1)
-        {   // Every time Next button is pressed count is updated. Based on this count we know which question to display next
-            if(check())
-                count=count+1;
+        {
+
+            // Check the current answer. If correct answer is selected increment count
+            if(check()) {count=count+1;}
+            //System.out.println(count);
             current++;
+
+            //update the Questions
             set();
 
+            // If last Question. Enable the Results button
+            if(current==9)
+            {
+                b1.setEnabled(false);
+                b2.setEnabled(true);
+                b2.setText("Result");
+            }
         }
 
+        // When results button is pressed
+        if(e.getActionCommand().equals("Result"))
+        {   // Check the current answer. If correct answer is selected increment count
+            if(check()) {count=count+1;}
+
+            //System.out.println(count);
+
+            // Show the number of correct answers
+            JOptionPane.showMessageDialog(this,"Correct Answers ="+count);
+            System.exit(0);
+        }
     }
 
-	/* ============================================================================================
-	 Step 3: Update the Question and Answer Options Text
-	 =========================================================================================== */
 
+    /* ============================================================================================
+     Step 3: Update the Question and Answer Options Text
+     =========================================================================================== */
     void set()
     {
         option[4].setSelected(true);
@@ -117,10 +146,9 @@ class ExpertsCodeOnlineTest extends JFrame implements ActionListener {
         for(int i=0,j=0;i<=90;i+=30,j++)
             option[j].setBounds(50,80+i,200,20);
     }
-	/* ============================================================================================
-	  Step 4: Check the Results
-	 =========================================================================================== */
-
+    /* ============================================================================================
+      Step 4: Check the Results
+     =========================================================================================== */
     boolean check()
     {
         if(current==0)
@@ -134,7 +162,7 @@ class ExpertsCodeOnlineTest extends JFrame implements ActionListener {
         if(current==4)
             return(option[2].isSelected());
         if(current==5)
-            return(option[2].isSelected());
+            return(option[1].isSelected());
         if(current==6)
             return(option[1].isSelected());
         if(current==7)
