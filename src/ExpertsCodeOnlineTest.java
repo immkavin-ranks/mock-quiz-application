@@ -25,7 +25,7 @@ class ExpertsCodeOnlineTest extends JFrame implements ActionListener {
             bg.add(option[i]);
         }
         b1=new JButton("Next");
-        b1.addActionListener(this);
+        b1.addActionListener(this); // ActionListener added
         add(b1);
         set();
         label.setBounds(30,40,450,20);
@@ -40,22 +40,29 @@ class ExpertsCodeOnlineTest extends JFrame implements ActionListener {
         setVisible(true);
         setSize(600,350);
     }
+    /* ============================================================================================
+      Step 2: Add Action Listener to change screen when Next Button is pressed
+     =========================================================================================== */
     public void actionPerformed(ActionEvent e)
     {
         if(e.getSource()==b1)
-        {
-
-            count=count+1;
+        {   // Every time Next button is pressed count is updated. Based on this count we know which question to display next
+            if(check())
+                count=count+1;
             current++;
             set();
+
         }
+
     }
 
-
+	/* ============================================================================================
+	 Step 3: Update the Question and Answer Options Text
+	 =========================================================================================== */
 
     void set()
     {
-
+        option[4].setSelected(true);
         if(current==0)
         {
             label.setText("Que1: Which one among these is not a datatype");
@@ -110,9 +117,37 @@ class ExpertsCodeOnlineTest extends JFrame implements ActionListener {
         for(int i=0,j=0;i<=90;i+=30,j++)
             option[j].setBounds(50,80+i,200,20);
     }
+	/* ============================================================================================
+	  Step 4: Check the Results
+	 =========================================================================================== */
+
+    boolean check()
+    {
+        if(current==0)
+            return(option[1].isSelected());
+        if(current==1)
+            return(option[2].isSelected());
+        if(current==2)
+            return(option[3].isSelected());
+        if(current==3)
+            return(option[0].isSelected());
+        if(current==4)
+            return(option[2].isSelected());
+        if(current==5)
+            return(option[2].isSelected());
+        if(current==6)
+            return(option[1].isSelected());
+        if(current==7)
+            return(option[3].isSelected());
+        if(current==8)
+            return(option[1].isSelected());
+        if(current==9)
+            return(option[2].isSelected());
+        return false;
+    }
     public static void main(String[] s)
     {
-
         new ExpertsCodeOnlineTest();
     }
+
 }
